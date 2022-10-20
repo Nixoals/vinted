@@ -126,6 +126,9 @@ router.get('/offer', async (req, res) => {
 		let sortBy;
 		let skip = 0;
 		let maxResultPerPage = resultNumber; //default all
+
+		console.log(title, priceMin, priceMax, sort, page, resultNumber);
+
 		if (title) {
 			regExp = new RegExp(title, 'i');
 		} else {
@@ -153,9 +156,9 @@ router.get('/offer', async (req, res) => {
 			}
 		}
 		const searchResult = await Offer.find({ product_name: regExp, product_price: priceRange }).skip(skip).sort(sortBy).limit(maxResultPerPage).populate('owner', 'account');
-
+		const lengthSearchResult = await Offer.find({ product_name: regExp, product_price: priceRange }).sort(sortBy).populate('owner', 'account');
 		res.status(200).json({
-			count: searchResult.length,
+			count: lengthSearchResult.length,
 			offers: searchResult,
 		});
 	} catch (error) {
