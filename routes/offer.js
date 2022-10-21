@@ -9,8 +9,6 @@ const Offer = require('../models/Offer');
 
 const cloudinary = require('cloudinary').v2;
 
-//convert file image uploaded
-
 router.post('/offer/publish', isAuthenticated, fileUpload(), async (req, res) => {
 	try {
 		//extract data
@@ -127,8 +125,6 @@ router.get('/offer', async (req, res) => {
 		let skip = 0;
 		let maxResultPerPage = resultNumber; //default all
 
-		console.log(title, priceMin, priceMax, sort, page, resultNumber);
-
 		if (title) {
 			regExp = new RegExp(title, 'i');
 		} else {
@@ -146,19 +142,17 @@ router.get('/offer', async (req, res) => {
 		if (sort) {
 			if (sort === 'price-desc') {
 				sortBy = { product_price: -1 };
-			} else {
+			} else if (sort === 'price-asc') {
 				sortBy = { product_price: 1 };
 			}
 		}
-		if (page) {
-			if (page > 1) {
-				skip = maxResultPerPage * page - maxResultPerPage;
-			}
+		if (page && page > 1) {
+			skip = maxResultPerPage * page - maxResultPerPage;
 		}
 		const searchResult = await Offer.find({ product_name: regExp, product_price: priceRange }).skip(skip).sort(sortBy).limit(maxResultPerPage).populate('owner', 'account');
-		const lengthSearchResult = await Offer.find({ product_name: regExp, product_price: priceRange }).sort(sortBy).populate('owner', 'account');
+		const lengthSearchResult = await Offer.count({ product_name: regExp, product_price: priceRange });
 		res.status(200).json({
-			count: lengthSearchResult.length,
+			count: lengthSearchResult,
 			offers: searchResult,
 		});
 	} catch (error) {
