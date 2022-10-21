@@ -26,12 +26,24 @@ app.use(loginRoutes);
 const offerRoutes = require('./routes/offer');
 app.use(offerRoutes);
 
+app.get('/', (req, res) => {
+	try {
+		res.json({
+			message: 'coucou voici mon nouveau projet',
+		});
+	} catch (error) {
+		res.json({ message: error.message });
+	}
+});
+
 app.all('*', (req, res) => {
 	res.status(404).json({
 		message: 'This route does not exixst',
 	});
 });
 const port = process.env.PORT;
+
+console.log(port);
 
 app.listen(port, () => {
 	console.log(`Serveur started on port ${port}`);
