@@ -43,10 +43,10 @@ app.all('*', (req, res) => {
 	});
 });
 
-const port = 3000;
+// const port = proces;
 
-console.log(port);
+// console.log(port);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
 	console.log(`Serveur started on port ${port}`);
 });
