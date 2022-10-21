@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config;
+require('dotenv').config();
 
 const cloudinary = require('cloudinary').v2;
 mongoose.connect(process.env.MONGODB_URI);
