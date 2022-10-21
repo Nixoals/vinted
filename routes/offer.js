@@ -13,7 +13,7 @@ router.post('/offer/publish', isAuthenticated, fileUpload(), async (req, res) =>
 	try {
 		//extract data
 		const { title, description, price, condition, city, brand, size, color } = req.body;
-
+		console.log(title, description, price, condition, city, brand, size, color);
 		if (description.length > 500) {
 			return res.status(400).json({
 				message: "Description product should'nt exceed 500 chars",

@@ -20,7 +20,7 @@ app.use(express.json());
 const signupRoutes = require('./routes/signUp');
 app.use(signupRoutes);
 
-app.get('/user/signup1', async (req, res) => {
+app.post('/user/signup1', async (req, res) => {
 	try {
 		res.json({
 			message: 'cette route exist',
