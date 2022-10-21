@@ -14,8 +14,8 @@ cloudinary.config({
 });
 
 const app = express();
+app.use(cors());
 app.use(express.json());
-app.use(cors);
 
 const signupRoutes = require('./routes/signUp');
 app.use(signupRoutes);
@@ -28,6 +28,7 @@ app.use(offerRoutes);
 
 app.get('/', (req, res) => {
 	try {
+		console.log('test');
 		res.json({
 			message: 'coucou voici mon nouveau projet',
 		});
@@ -41,10 +42,11 @@ app.all('*', (req, res) => {
 		message: 'This route does not exixst',
 	});
 });
-const port = process.env.PORT;
+
+const port = 3000;
 
 console.log(port);
 
-app.listen(port, () => {
+app.listen(3000, () => {
 	console.log(`Serveur started on port ${port}`);
 });
