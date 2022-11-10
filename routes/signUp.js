@@ -23,43 +23,48 @@ const convertToBase64 = (file) => {
 
 router.post('/user/signup', fileUpload(), async (req, res) => {
 	try {
-		const { username, avatar, email, password, newsletter } = req.body;
-		const picture = req.files.avatar;
-		console.log(picture);
+		const { username, email, password, newsletter } = req.body;
+
 		const findUser = await User.findOne({
 			email: email,
 		});
 
-		const convertedPicture = convertToBase64(picture);
-
 		if (findUser) {
-			return res.status(400).json({
+			return res.status(401).json({
 				message: `User already exist`,
 			});
 		}
 		if (!username || !email || !password) {
-			return res.status(400).json({
+			return res.status(401).json({
 				message: `fill the resquired form`,
 			});
+		}
+
+		let secure_url;
+		const picture = req.files?.avatar;
+
+		if (!picture) {
+			secure_url = 'https://res.cloudinary.com/dbrbme99g/image/upload/v1668094806/vinted/avatar/defaultAvatar_h8z2jx.png';
+		} else {
+			const convertedPicture = convertToBase64(picture);
+			const result = await cloudinary.uploader.upload(convertedPicture, { folder: '/vinted/avatar' });
+			secure_url = result.secure_url;
 		}
 
 		const data = generateHash(password);
 		const newUser = new User({
 			email,
-			account: { username, avatar },
+			account: { username, avatar: secure_url },
 			newsletter,
 			salt: data.salt,
 			hash: data.hash,
 			token: data.token,
 		});
 
-		const result = await cloudinary.uploader.upload(convertedPicture, { folder: '/vinted/avatar' });
-		newUser.account.avatar = result.secure_url;
-
 		await newUser.save();
 		res.status(200).json({
 			_id: newUser._id,
-			account: { username: username, avatar: result.secure_url },
+			account: { username: username, avatar: secure_url },
 			token: data.token,
 		});
 	} catch (error) {

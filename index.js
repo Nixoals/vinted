@@ -55,10 +55,10 @@ app.all('*', (req, res) => {
 	});
 });
 
-// const port = proces;
+// const port = 4000;
 
 // console.log(port);
 
-app.listen(process.env.PORT, () => {
+app.listen(8080, () => {
 	console.log(`Serveur started youhou!!!}`);
 });
