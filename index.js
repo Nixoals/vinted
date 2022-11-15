@@ -38,6 +38,9 @@ app.use(loginRoutes);
 const offerRoutes = require('./routes/offer');
 app.use(offerRoutes);
 
+const paymentRoute = require('./routes/payment');
+app.use(paymentRoute);
+
 app.get('/', (req, res) => {
 	try {
 		console.log('test');

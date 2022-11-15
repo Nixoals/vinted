@@ -25,6 +25,7 @@ router.post('/user/login', async (req, res) => {
 				return res.status(200).json({
 					token: findUser.token,
 					account: findUser.account,
+					id: findUser._id,
 				});
 			} else {
 				return res.status(401).json({ message: `Failed to authenticate. Username Or password inccorect` });

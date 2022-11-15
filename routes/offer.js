@@ -42,8 +42,10 @@ router.post('/offer/publish', isAuthenticated, fileUpload(), async (req, res) =>
 				secure_url: '',
 			},
 		});
+		console.log(req.files.picture);
 		if (req.files?.picture) {
 			const picture = req.files.picture;
+
 			const convertedPicture = convertToBase64(picture);
 			const result = await cloudinary.uploader.upload(convertedPicture, {
 				folder: '/vinted/offers',
@@ -124,7 +126,7 @@ router.get('/offer', async (req, res) => {
 		let sortBy;
 		let skip = 0;
 		let maxResultPerPage = resultNumber; //default all
-
+		console.log(title, priceMin);
 		if (title) {
 			regExp = new RegExp(title, 'i');
 		} else {
@@ -167,6 +169,18 @@ router.get('/offer/:id', async (req, res) => {
 		const id = req.params.id;
 		const findOffer = await Offer.findById(id).populate('owner', 'account');
 		res.json(findOffer);
+	} catch (error) {
+		res.status(400).json({
+			message: error.message,
+		});
+	}
+});
+
+router.post('/offer/publish-test', fileUpload(), async (req, res) => {
+	try {
+		const picture = req.files?.picture;
+		console.log(req.body, picture);
+		res.json(picture);
 	} catch (error) {
 		res.status(400).json({
 			message: error.message,
